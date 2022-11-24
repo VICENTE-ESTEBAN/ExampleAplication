@@ -1,0 +1,36 @@
+package com.actia.myapplication.data.service
+
+import okhttp3.ConnectionPool
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+
+
+object RetrofitItemsProvider {
+
+    private const val BASE_URL = "https://www.omdbapi.com/"
+
+
+    private lateinit var retrofit:Retrofit
+
+    fun <S> createService(serviceClass: Class<S>): S {
+        val httpClient = OkHttpClient.Builder()
+
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
+
+        httpClient.addInterceptor(logging)
+
+        val pool = ConnectionPool(5, 60000, TimeUnit.MILLISECONDS)
+        httpClient.connectionPool(pool)
+
+        retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(httpClient.build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return retrofit.create(serviceClass)
+    }
+}
