@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_home"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/sellProductListFragment">
+
+    <fragment
+        android:id="@+id/sellProductListFragment"
+        android:name="com.ibermatica.tpvoncevisual.productList.ui.SellProductListFragment"
+        android:label="SellProductListFragment"
+        tools:layout="@layout/sell_product_list_fragment" />
+</navigation>
