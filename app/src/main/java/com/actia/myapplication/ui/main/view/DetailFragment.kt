@@ -78,9 +78,8 @@ class DetailFragment : Fragment() {
         mViewModel.hasErrorOnRequestiveData.observe(viewLifecycleOwner){
             if(it && isResumed) {
                 showToastAndExit(
-                    resources.getString(R.string.error_on_request), Toast.LENGTH_LONG
+                    resources.getString(R.string.error_on_request)
                 )
-                    .show()
             }
         }
 
@@ -91,6 +90,8 @@ class DetailFragment : Fragment() {
         {
             isShowVeloVisible(true)
         }
+
+        binding.lifecycleOwner = this
 
         //here data must be an instance of the class MarsDataProvider
         //here data must be an instance of the class MarsDataProvider

@@ -7,4 +7,7 @@ object Constants {
      const val APIKEY = "8da14947"
 
      const val EMPTY_FIELD = "N/A"
+
+
+     const val SHOW_ALL_YEARS = "<All Years>"
 }

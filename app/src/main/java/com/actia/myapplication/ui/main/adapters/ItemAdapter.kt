@@ -1,11 +1,13 @@
 package com.actia.myapplication.ui.main.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.actia.myapplication.BR
@@ -17,20 +19,27 @@ import com.actia.myapplication.util.Constants.EMPTY_FIELD
 import com.squareup.picasso.Picasso
 
 
-class ItemAdapter(private val listItems:List<Item>) : RecyclerView.Adapter<ItemAdapter.BaseViewHolder>() {
+class ItemAdapter(private val listOfItems:List<Item>) :
+    RecyclerView.Adapter<ItemAdapter.BaseViewHolder>(),
+    Filterable {
+
+    private val listItems: ArrayList<Item> by lazy {
+        val myArray = arrayListOf<Item>()
+
+        myArray.addAll(listOfItems)
+
+        myArray
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): BaseViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = DataBindingUtil.inflate<ViewDataBinding>(
-            layoutInflater, viewType, parent, false
-        )
 
         val bindingA: ImdbItemsBinding = DataBindingUtil.inflate(
             layoutInflater,
-            com.actia.myapplication.R.layout.imdb_items,
+            R.layout.imdb_items,
             parent,
             false
         )
@@ -87,12 +96,51 @@ class ItemAdapter(private val listItems:List<Item>) : RecyclerView.Adapter<ItemA
         }
 
         private fun getDimension(context: Context, dimen:Int):Int{
-            return context.resources.getDimension(R.dimen.width_item_image).toInt()
+            return context.resources.getDimension(dimen).toInt()
         }
     }
 
     override fun getItemCount(): Int {
         return listItems.size
+    }
+
+    override fun getFilter(): Filter {
+        return yearFilter
+    }
+
+    private val yearFilter: Filter = object : Filter() {
+        override fun performFiltering(constraint: CharSequence): FilterResults {
+            val filteredList: List<Item> = if(constraint == Constants.SHOW_ALL_YEARS)
+            {
+                fillArrayOfData()
+            }
+            else {
+                listOfItems.filter {
+                    it.releaseYear == constraint
+                }
+            }
+
+            val results = FilterResults()
+            results.values = filteredList
+            return results
+
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        override fun publishResults(constraint: CharSequence, results: FilterResults) {
+            listItems.clear()
+            listItems.addAll(results.values as List<Item>)
+            notifyDataSetChanged()
+        }
+    }
+
+
+    private fun fillArrayOfData(): ArrayList<Item> {
+        val myArray = arrayListOf<Item>()
+
+        myArray.addAll(listOfItems)
+
+        return myArray
     }
 
 }

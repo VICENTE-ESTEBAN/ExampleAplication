@@ -2,22 +2,26 @@ package com.actia.myapplication.ui.main.viewmodel
 
 import android.app.Application
 import android.util.Log
+import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.actia.myapplication.data.domain.model.DetailItem
-import com.actia.myapplication.data.domain.usecase.GetItemsUseCase
 import com.actia.myapplication.data.domain.model.Item
 import com.actia.myapplication.data.domain.model.Result
 import com.actia.myapplication.data.domain.usecase.GetDetailItemByImdbUseCase
 import com.actia.myapplication.data.domain.usecase.GetDetailItemByTitleUseCase
-import com.actia.myapplication.data.repository.network.DetailItemRepositoryAPIImpl
+import com.actia.myapplication.data.domain.usecase.GetItemsUseCase
 import com.actia.myapplication.ui.base.viewmodel.BaseViewModel
 import com.actia.myapplication.util.Constants
+import com.actia.myapplication.util.Constants.SHOW_ALL_YEARS
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.inject
+
 
 @OptIn(KoinApiExtension::class)
 class MainViewModel(application: Application) : BaseViewModel(application)
@@ -27,12 +31,27 @@ class MainViewModel(application: Application) : BaseViewModel(application)
         val TAG = MainViewModel::class.java.simpleName
     }
 
+    val getYearsLiveData : ObservableArrayList<String> = ObservableArrayList<String>()
+    val selectedYearLiveData :MutableLiveData<Int> = MutableLiveData<Int>(-1)
+
     private val getItemsUseCase:GetItemsUseCase by inject()
     private val getDetailItemByImdbUseCase: GetDetailItemByImdbUseCase by inject()
     private val getDetailItemByTitleUseCase: GetDetailItemByTitleUseCase by inject()
+    private val _getItemsLiveData: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
 
-   private val _getItemsLiveData: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
-    val getItemsLiveData :LiveData<List<Item>> = _getItemsLiveData
+    val getItemsLiveData :LiveData<List<Item>> = Transformations.map(selectedYearLiveData)
+    {
+            yearSelected ->
+                val years = getYearsLiveData
+                if (years.isNotEmpty() && yearSelected<years.size) {
+                    val year = years[yearSelected]
+                    filterItemsByYear(year)
+                } else {
+                    _getItemsLiveData.value
+                }
+
+
+    }
 
     private val _hasErrorOnRequestiveData: MutableLiveData<Boolean> = MutableLiveData(false)
     val hasErrorOnRequestiveData :LiveData<Boolean> = _hasErrorOnRequestiveData
@@ -44,6 +63,10 @@ class MainViewModel(application: Application) : BaseViewModel(application)
 
 
     fun loadItems(title:String){
+
+        getYearsLiveData.clear()
+        _getItemsLiveData.value = emptyList()
+
         getItemsUseCase.execute(Constants.APIKEY, title)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -76,6 +99,24 @@ class MainViewModel(application: Application) : BaseViewModel(application)
             .addTo(disposables)
     }
 
+    private fun getYearsFromItem(): List<String> {
+        return _getItemsLiveData.value?.mapNotNull {
+            it.releaseYear
+        }?.distinct()?: emptyList()
+    }
+
+    private fun filterItemsByYear(year:String): List<Item> {
+        return if(year == SHOW_ALL_YEARS)
+        {
+            _getItemsLiveData.value
+        }
+        else {
+            _getItemsLiveData.value?.filter {
+                it.releaseYear == year
+            }?.toList()
+        } ?: emptyList()
+    }
+
     private fun getDetailItemByTitle(title:String) {
         getDetailItemByTitleUseCase.execute(Constants.APIKEY, title)
             .subscribeOn(Schedulers.computation())
@@ -99,15 +140,26 @@ class MainViewModel(application: Application) : BaseViewModel(application)
     }
 
     private fun handleGetItemsUseCase(result: Result<List<Item>>) {
+
         when (result)
         {
             is Result.Success<List<Item>>->{
+
                 _getItemsLiveData.value = result.value
+
+                getYearsLiveData.addAll(getYearsFromItem())
+                if(result.value.isNotEmpty())
+                    getYearsLiveData.add(0, SHOW_ALL_YEARS)
             }
             is Result.Failure<List<Item>>->{
                 sendError(result.throwable.message)
+
+                getYearsLiveData.clear()
             }
         }
+
+        selectedYearLiveData.value = 0
+
     }
 
     private fun sendError(error: String?) {

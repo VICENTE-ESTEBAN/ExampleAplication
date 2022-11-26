@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -11,8 +13,10 @@ import com.actia.myapplication.R
 import com.actia.myapplication.databinding.FragmentMainBinding
 import com.actia.myapplication.ui.main.adapters.ItemAdapter
 import com.actia.myapplication.ui.main.viewmodel.MainViewModel
+import com.actia.myapplication.util.Constants.SHOW_ALL_YEARS
 import com.actia.myapplication.util.hideKeyboard
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,17 +69,21 @@ class MainFragment : Fragment() {
 
             isShowVeloVisible(true)
             activity?.hideKeyboard()
-            binding.rvItems.adapter = null
             mViewModel.loadItems(binding.etTitle.text.toString())
         }
 
         mViewModel.getItemsLiveData.observe(viewLifecycleOwner){
             binding.rvItems.adapter = ItemAdapter(it)
             isShowVeloVisible(false)
+            binding.spinYears.visibility = if(it.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
         mViewModel.hasErrorOnRequestiveData.observe(viewLifecycleOwner){
             if(it && isResumed) {
+
+                isShowVeloVisible(false)
+                binding.spinYears.visibility = View.GONE
+
                 Toast.makeText(
                     context,
                     resources.getText(R.string.error_on_request), Toast.LENGTH_LONG
@@ -84,6 +92,10 @@ class MainFragment : Fragment() {
             }
         }
 
+
+        binding.lifecycleOwner = this
+
+        binding.mainViewModel = mViewModel
 
         // Inflate the layout for this fragment
         return binding.root

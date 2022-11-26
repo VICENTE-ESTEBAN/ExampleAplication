@@ -5,8 +5,10 @@
     tools:context=".ui.main.view.MainFragment">
 
     <data>
-
+        <variable name="mainViewModel" type="com.actia.myapplication.ui.main.viewmodel.MainViewModel" />
     </data>
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,7 +24,9 @@
             app:layout_constraintEnd_toStartOf="@+id/btnBuscar"
             android:hint = "@string/hint_edittext_title"
             android:autofillHints="name"
-            android:inputType="text" />
+            android:inputType="text"/>
+
+
 
 
         <androidx.appcompat.widget.AppCompatButton
@@ -39,6 +43,21 @@
             app:layout_constraintTop_toTopOf="@+id/etTitle"
             app:layout_constraintVertical_bias="0.0" />
 
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinYears"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintTop_toBottomOf="@+id/btnBuscar"
+            android:entries="@{mainViewModel.getYearsLiveData}"
+            android:selectedItemPosition="@={mainViewModel.selectedYearLiveData}"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+
+        </androidx.appcompat.widget.AppCompatSpinner>
+
 
         <FrameLayout
             android:layout_width="0dp"
@@ -46,7 +65,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnBuscar">
+            app:layout_constraintTop_toBottomOf="@+id/spinYears">
 
 
             <TextView
