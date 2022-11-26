@@ -1,6 +1,6 @@
 package com.actia.myapplication.data.repository.mappers
 
-import com.actia.myapplication.data.model.Item
+import com.actia.myapplication.data.domain.model.Item
 import com.actia.myapplication.data.repository.mappers.helpers.Mapper
 import com.actia.myapplication.data.repository.response.ItemDTO
 import com.actia.myapplication.data.repository.response.SearchResultDTO
@@ -18,7 +18,7 @@ class ItemsMapper: Mapper<SearchResultDTO, List<Item>> {
             return emptyList()
     }
 
-    private fun mapSearchResultDTOToItem(itemDTO: ItemDTO):Item{
+    private fun mapSearchResultDTOToItem(itemDTO: ItemDTO): Item {
         return Item(
             poster = itemDTO.poster,
             title = itemDTO.title,

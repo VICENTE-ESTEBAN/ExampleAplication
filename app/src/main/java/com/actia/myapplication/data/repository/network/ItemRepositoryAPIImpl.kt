@@ -1,7 +1,7 @@
 package com.actia.myapplication.data.repository.network
 
-import com.actia.myapplication.data.model.Item
-import com.actia.myapplication.data.model.Result
+import com.actia.myapplication.data.domain.model.Item
+import com.actia.myapplication.data.domain.model.Result
 import com.actia.myapplication.data.repository.mappers.helpers.Mapper
 import com.actia.myapplication.data.repository.response.SearchResultDTO
 import com.actia.myapplication.data.service.RetrofitItemsEndpoints

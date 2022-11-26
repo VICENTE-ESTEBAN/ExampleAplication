@@ -1,16 +1,16 @@
 package com.actia.myapplication.ui.main.view
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.actia.myapplication.R
 import com.actia.myapplication.databinding.FragmentMainBinding
+import com.actia.myapplication.ui.main.adapters.ItemAdapter
 import com.actia.myapplication.ui.main.viewmodel.MainViewModel
+import com.actia.myapplication.util.hideKeyboard
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 // TODO: Rename parameter arguments, choose names that match
@@ -47,11 +47,16 @@ class MainFragment : Fragment() {
         binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         //binding  = FragmentMainBinding.inflate(inflater, container, false)
 
-        binding.btnBuscar.setOnClickListener { mViewModel.loadItems(binding.etTitle.text.toString()) }
+        binding.rvItems.setEmptyView(binding.tvEmptyList)
+
+
+        binding.btnBuscar.setOnClickListener {
+            activity?.hideKeyboard()
+            binding.rvItems.adapter = null
+            mViewModel.loadItems(binding.etTitle.text.toString()) }
 
         mViewModel.getItemsLiveData.observe(viewLifecycleOwner){
-           val item =  mViewModel.getDetailItem(2)
-            Log.d("dd", item?.imdb?:"")
+            binding.rvItems.adapter = ItemAdapter(it)
         }
 
         // Inflate the layout for this fragment

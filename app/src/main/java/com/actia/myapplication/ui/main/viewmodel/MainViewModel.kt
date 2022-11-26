@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.actia.myapplication.data.domain.usecase.GetItemsUseCase
-import com.actia.myapplication.data.model.Item
-import com.actia.myapplication.data.model.Result
+import com.actia.myapplication.data.domain.model.Item
+import com.actia.myapplication.data.domain.model.Result
 import com.actia.myapplication.ui.base.viewmodel.BaseViewModel
 import com.actia.myapplication.util.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -33,7 +33,7 @@ class MainViewModel(application: Application) : BaseViewModel(application)
     }
 
 
-    fun getDetailItem(index:Int):Item?{
+    fun getDetailItem(index:Int): Item?{
         return with(_getItemsLiveData.value)
         {
             if (this!=null && this.isNotEmpty() && index< this.count()) {

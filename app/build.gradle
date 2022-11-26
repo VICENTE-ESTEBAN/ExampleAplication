@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
+apply plugin: "kotlin-kapt"
 
 
 
@@ -91,5 +92,9 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-viewmodel:$koin_version"
     // Koin Core features
     implementation "io.insert-koin:koin-core:$koin_version"
+
+    //picassa
+    ext.picassa_version = '2.8'
+    implementation "com.squareup.picasso:picasso:$picassa_version"
 
 }

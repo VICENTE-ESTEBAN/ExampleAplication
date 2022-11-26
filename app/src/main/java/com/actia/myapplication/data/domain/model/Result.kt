@@ -1,4 +1,4 @@
-package com.actia.myapplication.data.model
+package com.actia.myapplication.data.domain.model
 
 sealed class Result<T> {
 

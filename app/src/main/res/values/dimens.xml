@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="width_item_image">100dp</dimen>
+    <dimen name="height_item_image">100dp</dimen>
+</resources>
