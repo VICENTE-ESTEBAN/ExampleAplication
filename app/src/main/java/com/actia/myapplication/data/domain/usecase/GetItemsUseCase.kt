@@ -6,9 +6,7 @@ import com.actia.myapplication.data.repository.network.ItemRepositoryAPI
 import io.reactivex.Observable
 import org.koin.core.component.KoinComponent
 
-class GetItemsUseCase(private val itemRepository: ItemRepositoryAPI): KoinComponent {
-
-
+class GetItemsUseCase(private val itemRepository: ItemRepositoryAPI) {
 
     fun execute(apiKey:String, title:String): Observable<Result<List<Item>>> {
         return itemRepository.getItemsByName(apiKey, title)

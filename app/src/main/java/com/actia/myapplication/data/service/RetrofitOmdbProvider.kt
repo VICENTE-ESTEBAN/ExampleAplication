@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
-object RetrofitItemsProvider {
+object RetrofitOmdbProvider {
 
     private const val BASE_URL = "https://www.omdbapi.com/"
 

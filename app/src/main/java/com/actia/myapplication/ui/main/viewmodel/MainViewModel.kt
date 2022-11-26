@@ -1,11 +1,16 @@
 package com.actia.myapplication.ui.main.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.actia.myapplication.data.domain.model.DetailItem
 import com.actia.myapplication.data.domain.usecase.GetItemsUseCase
 import com.actia.myapplication.data.domain.model.Item
 import com.actia.myapplication.data.domain.model.Result
+import com.actia.myapplication.data.domain.usecase.GetDetailItemByImdbUseCase
+import com.actia.myapplication.data.domain.usecase.GetDetailItemByTitleUseCase
+import com.actia.myapplication.data.repository.network.DetailItemRepositoryAPIImpl
 import com.actia.myapplication.ui.base.viewmodel.BaseViewModel
 import com.actia.myapplication.util.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,10 +22,26 @@ import org.koin.core.component.inject
 @OptIn(KoinApiExtension::class)
 class MainViewModel(application: Application) : BaseViewModel(application)
 {
-    private val getItemsUseCase:GetItemsUseCase by inject()
+    companion object
+    {
+        val TAG = MainViewModel::class.java.simpleName
+    }
 
-   private val _getItemsLiveData: MutableLiveData<List<Item>> = MutableLiveData()
+    private val getItemsUseCase:GetItemsUseCase by inject()
+    private val getDetailItemByImdbUseCase: GetDetailItemByImdbUseCase by inject()
+    private val getDetailItemByTitleUseCase: GetDetailItemByTitleUseCase by inject()
+
+   private val _getItemsLiveData: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
     val getItemsLiveData :LiveData<List<Item>> = _getItemsLiveData
+
+    private val _hasErrorOnRequestiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+    val hasErrorOnRequestiveData :LiveData<Boolean> = _hasErrorOnRequestiveData
+
+
+    private val _getDetailItemLiveData: MutableLiveData<DetailItem> = MutableLiveData()
+    val getDetailItemLiveData :LiveData<DetailItem> = _getDetailItemLiveData
+
+
 
     fun loadItems(title:String){
         getItemsUseCase.execute(Constants.APIKEY, title)
@@ -32,15 +53,48 @@ class MainViewModel(application: Application) : BaseViewModel(application)
             .addTo(disposables)
     }
 
+    fun canGetDetail(data:Item?):Boolean{
 
-    fun getDetailItem(index:Int): Item?{
-        return with(_getItemsLiveData.value)
-        {
-            if (this!=null && this.isNotEmpty() && index< this.count()) {
-                this[index]
+        return if(!data?.imdb.isNullOrEmpty()) {
+            getDetailItemByImdb(data?.imdb!!)
+            true
+        } else if(!data?.title.isNullOrEmpty()) {
+            getDetailItemByTitle(data?.title!!)
+            true
+        } else {
+            false
+        }
+    }
+
+    private fun getDetailItemByImdb(imdb:String) {
+        getDetailItemByImdbUseCase.execute(Constants.APIKEY, imdb)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                handleGetDetailItemUseCase(it)
             }
-            else
-                null
+            .addTo(disposables)
+    }
+
+    private fun getDetailItemByTitle(title:String) {
+        getDetailItemByTitleUseCase.execute(Constants.APIKEY, title)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                handleGetDetailItemUseCase(it)
+            }
+            .addTo(disposables)
+    }
+
+    private fun handleGetDetailItemUseCase(result: Result<DetailItem>) {
+        when (result)
+        {
+            is Result.Success<DetailItem>->{
+                _getDetailItemLiveData.value = result.value
+            }
+            is Result.Failure<DetailItem>->{
+                sendError(result.throwable.message)
+            }
         }
     }
 
@@ -51,9 +105,15 @@ class MainViewModel(application: Application) : BaseViewModel(application)
                 _getItemsLiveData.value = result.value
             }
             is Result.Failure<List<Item>>->{
-
+                sendError(result.throwable.message)
             }
         }
+    }
+
+    private fun sendError(error: String?) {
+        error?.let { Log.e(TAG, it) }
+
+        _hasErrorOnRequestiveData.value = true
     }
 }
 

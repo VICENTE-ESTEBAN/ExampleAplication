@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
+    <merge
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:id="@+id/flVelo">
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/waiting_response"
+                android:layout_gravity="center"
+
+                android:textStyle="bold"
+                android:textSize="20sp"/>
+        </FrameLayout>
+    </merge>
+</layout>

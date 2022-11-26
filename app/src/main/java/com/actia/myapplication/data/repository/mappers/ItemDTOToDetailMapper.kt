@@ -1,21 +1,20 @@
 package com.actia.myapplication.data.repository.mappers
 
+import com.actia.myapplication.data.domain.model.DetailItem
 import com.actia.myapplication.data.domain.model.Item
 import com.actia.myapplication.data.repository.mappers.helpers.Mapper
 import com.actia.myapplication.data.repository.response.ItemDTO
-import com.actia.myapplication.data.repository.response.SearchResultDTO
-import com.actia.myapplication.util.Constants
 
-class ItemDTOToItemMapper: Mapper<ItemDTO, Item?> {
-    override fun map(input: ItemDTO): Item? {
-        return if(!input.response.isNullOrEmpty())
-            return Item(
-                poster = input.poster,
+class ItemDTOToDetailMapper: Mapper<ItemDTO, DetailItem> {
+    override fun map(input: ItemDTO): DetailItem {
+        return DetailItem(
                 title = input.title,
+                director = input.director,
+                poster = input.poster,
                 releaseYear = input.year,
-                imdb = input.imdbID
+                duration = input.runtime,
+                description = input.plot,
+                score = input.imdbRating,
             )
-        else
-            return null
     }
 }

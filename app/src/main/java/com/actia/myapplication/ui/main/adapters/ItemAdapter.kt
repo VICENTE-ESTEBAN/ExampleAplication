@@ -13,6 +13,7 @@ import com.actia.myapplication.R
 import com.actia.myapplication.data.domain.model.Item
 import com.actia.myapplication.databinding.ImdbItemsBinding
 import com.actia.myapplication.util.Constants
+import com.actia.myapplication.util.Constants.EMPTY_FIELD
 import com.squareup.picasso.Picasso
 
 
@@ -53,8 +54,9 @@ class ItemAdapter(private val listItems:List<Item>) : RecyclerView.Adapter<ItemA
     ) {
         fun bind(obj: Item) {
             val context = binding.root.context
+
             Picasso.get()
-                .load(obj.poster)
+                .load(parseURL(obj.poster))
                 .resize(
                     getDimension(context, R.dimen.width_item_image),
                     getDimension(context, R.dimen.height_item_image)
@@ -68,6 +70,13 @@ class ItemAdapter(private val listItems:List<Item>) : RecyclerView.Adapter<ItemA
                 redirectToDetail(obj)
             }
 
+        }
+
+        private fun parseURL(value:String?): String? {
+            return if (value.isNullOrEmpty() || value == EMPTY_FIELD)
+                null
+            else
+                value
         }
 
         private fun redirectToDetail(obj: Item) {

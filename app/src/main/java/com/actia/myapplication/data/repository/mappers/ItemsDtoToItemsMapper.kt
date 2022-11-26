@@ -5,7 +5,7 @@ import com.actia.myapplication.data.repository.mappers.helpers.Mapper
 import com.actia.myapplication.data.repository.response.ItemDTO
 import com.actia.myapplication.data.repository.response.SearchResultDTO
 
-class ItemsMapper: Mapper<SearchResultDTO, List<Item>> {
+class ItemsDtoToItemsMapper: Mapper<SearchResultDTO, List<Item>> {
     override fun map(input: SearchResultDTO): List<Item> {
         return if(input.response)
            input.search.map {

@@ -4,7 +4,7 @@ import com.actia.myapplication.data.domain.model.Item
 import com.actia.myapplication.data.domain.model.Result
 import com.actia.myapplication.data.repository.mappers.helpers.Mapper
 import com.actia.myapplication.data.repository.response.SearchResultDTO
-import com.actia.myapplication.data.service.RetrofitItemsEndpoints
+import com.actia.myapplication.data.service.RetrofitOmdbEndpoints
 import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.Response
@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 
 class ItemRepositoryAPIImpl(
-    private val itemApiService: RetrofitItemsEndpoints,
+    private val itemApiService: RetrofitOmdbEndpoints,
     private val itemDataMapper: Mapper<SearchResultDTO, List<Item>>
 ) : ItemRepositoryAPI
 {
@@ -49,7 +49,7 @@ class ItemRepositoryAPIImpl(
         val TAG = ItemRepositoryAPIImpl::class.java.simpleName
 
         fun getInstance(
-            feedsEndpoint: RetrofitItemsEndpoints,
+            feedsEndpoint: RetrofitOmdbEndpoints,
             itemMapper: Mapper<SearchResultDTO, List<Item>>
         ): ItemRepositoryAPI {
             if (initialized.compareAndSet(false, true)) {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.actia.myapplication.R
@@ -40,6 +41,10 @@ class MainFragment : Fragment() {
         }
     }
 
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,19 +53,45 @@ class MainFragment : Fragment() {
         //binding  = FragmentMainBinding.inflate(inflater, container, false)
 
         binding.rvItems.setEmptyView(binding.tvEmptyList)
-
+        isShowVeloVisible(false)
 
         binding.btnBuscar.setOnClickListener {
+            val textToSearch = binding.etTitle.text.toString()
+            if(textToSearch.isEmpty())
+            {
+                Toast.makeText(context, resources.getText(R.string.title_mandatory), Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            isShowVeloVisible(true)
             activity?.hideKeyboard()
             binding.rvItems.adapter = null
-            mViewModel.loadItems(binding.etTitle.text.toString()) }
+            mViewModel.loadItems(binding.etTitle.text.toString())
+        }
 
         mViewModel.getItemsLiveData.observe(viewLifecycleOwner){
             binding.rvItems.adapter = ItemAdapter(it)
+            isShowVeloVisible(false)
         }
+
+        mViewModel.hasErrorOnRequestiveData.observe(viewLifecycleOwner){
+            if(it && isResumed) {
+                Toast.makeText(
+                    context,
+                    resources.getText(R.string.error_on_request), Toast.LENGTH_LONG
+                )
+                    .show()
+            }
+        }
+
 
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+
+    private fun isShowVeloVisible(isVisible:Boolean){
+        binding.includeVelo.flVelo.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
     companion object {

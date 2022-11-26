@@ -6,7 +6,7 @@ import retrofit2.Call
 import retrofit2.http.*
 
 
-interface RetrofitItemsEndpoints {
+interface RetrofitOmdbEndpoints {
 
     @Headers(
         "Content-Type:application/json",
@@ -33,5 +33,20 @@ interface RetrofitItemsEndpoints {
     fun getItemByImdb(
         @Query("apikey") apikey:String,
         @Query("i") imdb: String
+    ): Call<ItemDTO>
+
+
+    @Headers(
+        "Content-Type:application/json",
+        "Accept:application/json",
+        "Content-Type: application/json",
+        "Cache-Control: no-cache",
+        "Content-Language: en-US"
+    )
+    @GET("/?r=json")
+    fun getItemByTitle(
+
+        @Query("apikey") apikey:String,
+        @Query("t") title: String
     ): Call<ItemDTO>
 }

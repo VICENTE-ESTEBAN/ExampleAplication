@@ -21,9 +21,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnBuscar"
             android:hint = "@string/hint_edittext_title"
-
-            android:autofillHints="title"
-            android:importantForAutofill="yes"/>
+            android:autofillHints="name"
+            android:inputType="text" />
 
 
         <androidx.appcompat.widget.AppCompatButton
@@ -32,7 +31,7 @@
             android:layout_height="wrap_content"
 
 
-            android:text="Buscar"
+            android:text="@string/btn_search_caption"
 
 
             app:layout_constraintBottom_toBottomOf="@+id/etTitle"
@@ -75,7 +74,11 @@
         </FrameLayout>
 
 
+        <include android:id="@+id/include_velo" layout="@layout/include_waiting_response"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </layout>

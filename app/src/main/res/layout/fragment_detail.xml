@@ -5,18 +5,19 @@
     tools:context=".ui.main.view.MainFragment">
 
     <data>
-        <variable name="obj" type="com.actia.myapplication.data.domain.model.Item"/>
+        <variable name="obj" type="com.actia.myapplication.data.domain.model.DetailItem"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#fff">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@android:color/transparent"
+            android:background="#f00"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +74,8 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/lblDirector"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier2"
-            tools:text="@string/hello_blank_fragment" />
+            tools:text="@string/hello_blank_fragment"
+            android:text="@{obj.director}"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgPoster"
@@ -81,8 +83,9 @@
             android:layout_height="@dimen/height_item_image"
 
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            tools:src="@tools:sample/avatars"
+            android:paddingTop="5dp"/>
 
         <TextView
             android:id="@+id/lblReleaseYear"
@@ -92,7 +95,7 @@
             android:text="@string/lbl_releaseYear"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblDirector" />
+            app:layout_constraintTop_toBottomOf="@+id/txtDirector" />
 
         <TextView
             android:id="@+id/txtReleaseYear"
@@ -104,7 +107,8 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/lblReleaseYear"
             app:layout_constraintEnd_toStartOf="@+id/imgPoster"
             app:layout_constraintStart_toEndOf="@+id/barrier2"
-            tools:text="@string/hello_blank_fragment" />
+            tools:text="@string/hello_blank_fragment"
+            android:text="@{obj.releaseYear}"/>
 
         <TextView
             android:id="@+id/lblDuration"
@@ -114,7 +118,7 @@
             android:text="@string/lbl_duration"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblReleaseYear" />
+            app:layout_constraintTop_toBottomOf="@+id/txtReleaseYear" />
 
 
         <TextView
@@ -126,7 +130,8 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/lblDuration"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier2"
-            tools:text="@string/hello_blank_fragment" />
+            tools:text="@string/hello_blank_fragment"
+            android:text="@{obj.duration}"/>
 
         <TextView
             android:id="@+id/lblDescription"
@@ -136,7 +141,7 @@
             android:text="@string/lbl_description"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblDuration" />
+            app:layout_constraintTop_toBottomOf="@+id/txtDuration" />
 
 
         <TextView
@@ -149,7 +154,8 @@
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier2"
-            tools:text="@string/hello_blank_fragment" />
+            tools:text="@string/hello_blank_fragment"
+            android:text="@{obj.description}"/>
 
 
         <TextView
@@ -160,7 +166,7 @@
             android:text="@string/lbl_score"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
 
         <TextView
             android:id="@+id/txtScore"
@@ -171,7 +177,8 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/lblScore"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier2"
-            tools:text="@string/hello_blank_fragment" />
+            tools:text="@string/hello_blank_fragment"
+            android:text="@{obj.score}"/>
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier2"
@@ -180,6 +187,8 @@
             app:barrierDirection="right"
             app:constraint_referenced_ids="lblTitle,
             lblDescription, lblDirector, lblDuration, lblReleaseYear, lblScore"/>
+
+        <include android:id="@+id/include_velo" layout="@layout/include_waiting_response"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

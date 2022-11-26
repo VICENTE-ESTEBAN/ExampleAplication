@@ -1,8 +1,12 @@
 package com.actia.myapplication.di
 
+import com.actia.myapplication.data.domain.usecase.GetDetailItemByImdbUseCase
+import com.actia.myapplication.data.domain.usecase.GetDetailItemByTitleUseCase
 import com.actia.myapplication.data.domain.usecase.GetItemsUseCase
+import com.actia.myapplication.data.repository.network.DetailItemRepositoryAPI
 import com.actia.myapplication.data.repository.network.ItemRepositoryAPI
 import org.koin.core.module.Module
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 class DomainModules : KoinModules {
@@ -16,5 +20,21 @@ class DomainModules : KoinModules {
 
             GetItemsUseCase(itemsRepository)
         }
+
+
+        single {
+
+            val detailItemRepository: DetailItemRepositoryAPI by inject()
+
+            GetDetailItemByImdbUseCase(detailItemRepository)
+        }
+
+        single {
+
+            val detailItemRepository: DetailItemRepositoryAPI by inject()
+
+            GetDetailItemByTitleUseCase(detailItemRepository)
+        }
+
     }
 }
