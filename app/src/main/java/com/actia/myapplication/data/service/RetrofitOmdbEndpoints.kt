@@ -30,7 +30,7 @@ interface RetrofitItemsEndpoints {
         "Content-Language: en-US"
     )
     @GET("/?r=json")
-    fun getItemsByImdb(
+    fun getItemByImdb(
         @Query("apikey") apikey:String,
         @Query("i") imdb: String
     ): Call<ItemDTO>
