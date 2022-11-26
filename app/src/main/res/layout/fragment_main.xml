@@ -20,9 +20,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnBuscar"
-            android:hint = "Introduzca un título"
+            android:hint = "@string/hint_edittext_title"
 
-            android:text="rambo"/>
+            android:autofillHints="title"
+            android:importantForAutofill="yes"/>
 
 
         <androidx.appcompat.widget.AppCompatButton
