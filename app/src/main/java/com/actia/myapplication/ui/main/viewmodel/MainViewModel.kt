@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.actia.myapplication.data.domain.model.DetailItem
@@ -16,14 +15,13 @@ import com.actia.myapplication.data.domain.usecase.GetItemsUseCase
 import com.actia.myapplication.ui.base.viewmodel.BaseViewModel
 import com.actia.myapplication.util.Constants
 import com.actia.myapplication.util.Constants.SHOW_ALL_YEARS
+import com.actia.myapplication.util.IdlingResourceCounter.countingIdlingResource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.inject
 
 
-@OptIn(KoinApiExtension::class)
 class MainViewModel(application: Application) : BaseViewModel(application)
 {
     companion object
@@ -68,11 +66,14 @@ class MainViewModel(application: Application) : BaseViewModel(application)
         getYearsLiveData.clear()
         getFullListItemsLiveData.value = emptyList()
 
+        countingIdlingResource.increment()
+
         getItemsUseCase.execute(Constants.APIKEY, title)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 handleGetItemsUseCase(it)
+                countingIdlingResource.decrement()
             }
             .addTo(disposables)
     }
@@ -91,11 +92,13 @@ class MainViewModel(application: Application) : BaseViewModel(application)
     }
 
     private fun getDetailItemByImdb(imdb:String) {
+        countingIdlingResource.increment()
         getDetailItemByImdbUseCase.execute(Constants.APIKEY, imdb)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 handleGetDetailItemUseCase(it)
+                countingIdlingResource.decrement()
             }
             .addTo(disposables)
     }
@@ -119,12 +122,14 @@ class MainViewModel(application: Application) : BaseViewModel(application)
     }
 
     private fun getDetailItemByTitle(title:String) {
+        countingIdlingResource.increment()
 
         getDetailItemByTitleUseCase.execute(Constants.APIKEY, title)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 handleGetDetailItemUseCase(it)
+                countingIdlingResource.decrement()
             }
             .addTo(disposables)
     }

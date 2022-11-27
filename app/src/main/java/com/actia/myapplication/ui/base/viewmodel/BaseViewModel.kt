@@ -6,8 +6,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
+import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 
+@OptIn(KoinApiExtension::class)
 open class BaseViewModel(application: Application) : ApplicationViewModel(application), KoinComponent {
 
 

@@ -16,7 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
 
-        android:name=".ApplicationActia">
+        android:name=".ApplicationActia"
+
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.main.view.MainActivity"
             android:exported="true">

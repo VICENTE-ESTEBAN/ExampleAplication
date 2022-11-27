@@ -10,12 +10,9 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitOmdbProvider {
 
-    private const val BASE_URL = "https://www.omdbapi.com/"
-
-
     private lateinit var retrofit:Retrofit
 
-    fun <S> createService(serviceClass: Class<S>): S {
+    fun <S> createService(baseUrl:String, serviceClass: Class<S>): S {
         val httpClient = OkHttpClient.Builder()
 
         val logging = HttpLoggingInterceptor()
@@ -27,7 +24,7 @@ object RetrofitOmdbProvider {
         httpClient.connectionPool(pool)
 
         retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .client(httpClient.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

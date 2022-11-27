@@ -1,6 +1,5 @@
 package com.actia.myapplication.ui.main.adapters
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,8 +11,6 @@ import com.actia.myapplication.R
 import com.actia.myapplication.data.domain.model.Item
 import com.actia.myapplication.databinding.ImdbItemsBinding
 import com.actia.myapplication.util.Constants
-import com.actia.myapplication.util.Constants.EMPTY_FIELD
-import com.squareup.picasso.Picasso
 
 
 class ItemAdapter(listOfItems:List<Item>) :
@@ -56,6 +53,14 @@ class ItemAdapter(listOfItems:List<Item>) :
     {
         listItems.removeAt(position)
         notifyItemRemoved(position)
+    }
+
+    fun getItem(position:Int):Item?
+    {
+        return if(position>=0 && position<listItems.size) {
+             listItems[position]
+        }
+        else null
     }
 
     class BaseViewHolder(private val binding: ImdbItemsBinding) : RecyclerView.ViewHolder(

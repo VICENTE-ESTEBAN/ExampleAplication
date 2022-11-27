@@ -12,6 +12,6 @@ class AppModules : KoinModules {
     }
 
     private fun getViewModels() = module {
-        viewModel { MainViewModel(androidApplication()) }
+        viewModel(override = true) { MainViewModel(androidApplication()) }
     }
 }
