@@ -4,6 +4,7 @@ import com.actia.myapplication.data.domain.model.Item
 import com.actia.myapplication.data.repository.mappers.helpers.Mapper
 import com.actia.myapplication.data.repository.response.ItemDTO
 import com.actia.myapplication.data.repository.response.SearchResultDTO
+import com.actia.myapplication.util.Constants
 
 class ItemsDtoToItemsMapper: Mapper<SearchResultDTO, List<Item>> {
     override fun map(input: SearchResultDTO): List<Item> {
@@ -20,10 +21,17 @@ class ItemsDtoToItemsMapper: Mapper<SearchResultDTO, List<Item>> {
 
     private fun mapSearchResultDTOToItem(itemDTO: ItemDTO): Item {
         return Item(
-            poster = itemDTO.poster,
+            poster = parseURL(itemDTO.poster),
             title = itemDTO.title,
             releaseYear = itemDTO.year,
             imdb = itemDTO.imdbID
         )
+    }
+
+    private fun parseURL(value:String?): String? {
+        return if (value.isNullOrEmpty() || value == Constants.EMPTY_FIELD)
+            ""
+        else
+            value
     }
 }

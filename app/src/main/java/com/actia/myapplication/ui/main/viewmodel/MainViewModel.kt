@@ -31,41 +31,42 @@ class MainViewModel(application: Application) : BaseViewModel(application)
         val TAG = MainViewModel::class.java.simpleName
     }
 
+
+    private val getItemsUseCase:GetItemsUseCase by inject()
+
     val getYearsLiveData : ObservableArrayList<String> = ObservableArrayList<String>()
     val selectedYearLiveData :MutableLiveData<Int> = MutableLiveData<Int>(-1)
 
-    private val getItemsUseCase:GetItemsUseCase by inject()
     private val getDetailItemByImdbUseCase: GetDetailItemByImdbUseCase by inject()
     private val getDetailItemByTitleUseCase: GetDetailItemByTitleUseCase by inject()
-    private val _getItemsLiveData: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
+    private val getFullListItemsLiveData: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
+
 
     val getItemsLiveData :LiveData<List<Item>> = Transformations.map(selectedYearLiveData)
     {
             yearSelected ->
-                val years = getYearsLiveData
-                if (years.isNotEmpty() && yearSelected<years.size) {
-                    val year = years[yearSelected]
-                    filterItemsByYear(year)
-                } else {
-                    _getItemsLiveData.value
-                }
-
-
+        val years = getYearsLiveData
+        (if (years.isNotEmpty() && yearSelected<years.size) {
+            val year = years[yearSelected]
+            filterItemsByYear(year)
+        } else {
+            getFullListItemsLiveData.value
+        })
     }
 
     private val _hasErrorOnRequestiveData: MutableLiveData<Boolean> = MutableLiveData(false)
     val hasErrorOnRequestiveData :LiveData<Boolean> = _hasErrorOnRequestiveData
 
 
-    private val _getDetailItemLiveData: MutableLiveData<DetailItem> = MutableLiveData()
-    val getDetailItemLiveData :LiveData<DetailItem> = _getDetailItemLiveData
+    private val _getDetailItemLiveData: MutableLiveData<DetailItem?> = MutableLiveData(null)
+    val getDetailItemLiveData :LiveData<DetailItem?> = _getDetailItemLiveData
 
 
 
     fun loadItems(title:String){
 
         getYearsLiveData.clear()
-        _getItemsLiveData.value = emptyList()
+        getFullListItemsLiveData.value = emptyList()
 
         getItemsUseCase.execute(Constants.APIKEY, title)
             .subscribeOn(Schedulers.computation())
@@ -77,7 +78,7 @@ class MainViewModel(application: Application) : BaseViewModel(application)
     }
 
     fun canGetDetail(data:Item?):Boolean{
-
+        _getDetailItemLiveData.value = null
         return if(!data?.imdb.isNullOrEmpty()) {
             getDetailItemByImdb(data?.imdb!!)
             true
@@ -100,7 +101,7 @@ class MainViewModel(application: Application) : BaseViewModel(application)
     }
 
     private fun getYearsFromItem(): List<String> {
-        return _getItemsLiveData.value?.mapNotNull {
+        return getFullListItemsLiveData.value?.mapNotNull {
             it.releaseYear
         }?.distinct()?: emptyList()
     }
@@ -108,16 +109,17 @@ class MainViewModel(application: Application) : BaseViewModel(application)
     private fun filterItemsByYear(year:String): List<Item> {
         return if(year == SHOW_ALL_YEARS)
         {
-            _getItemsLiveData.value
+            getFullListItemsLiveData.value
         }
         else {
-            _getItemsLiveData.value?.filter {
+            getFullListItemsLiveData.value?.filter {
                 it.releaseYear == year
             }?.toList()
         } ?: emptyList()
     }
 
     private fun getDetailItemByTitle(title:String) {
+
         getDetailItemByTitleUseCase.execute(Constants.APIKEY, title)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -145,7 +147,7 @@ class MainViewModel(application: Application) : BaseViewModel(application)
         {
             is Result.Success<List<Item>>->{
 
-                _getItemsLiveData.value = result.value
+                getFullListItemsLiveData.value = result.value
 
                 getYearsLiveData.addAll(getYearsFromItem())
                 if(result.value.isNotEmpty())

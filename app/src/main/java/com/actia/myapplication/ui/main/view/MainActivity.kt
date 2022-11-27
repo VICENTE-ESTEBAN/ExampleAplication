@@ -6,11 +6,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.setContentView
 import com.actia.myapplication.R
 import com.actia.myapplication.databinding.ActivityMainBinding
+import com.actia.myapplication.ui.base.ui.BaseActivity
 import com.actia.myapplication.ui.main.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity(){
 
     private lateinit var binding: ActivityMainBinding
     val mViewModel: MainViewModel by viewModel()

@@ -20,7 +20,13 @@
         android:id="@+id/detailFragment"
         android:name="com.actia.myapplication.ui.main.view.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail">
+        <action android:id="@+id/action_detailFragment_to_mainFragmen"
+            app:destination="@+id/mainFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/mainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 
 </navigation>

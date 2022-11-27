@@ -5,7 +5,8 @@ import android.app.Application
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
-    fun Activity.hideKeyboard() {
+
+fun Activity.hideKeyboard() {
         val imm: InputMethodManager =
             getSystemService(Application.INPUT_METHOD_SERVICE) as InputMethodManager
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -16,3 +17,4 @@ import android.view.inputmethod.InputMethodManager
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
+

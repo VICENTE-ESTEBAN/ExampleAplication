@@ -9,7 +9,6 @@
     </data>
 
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,14 +18,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
 
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnBuscar"
-            android:hint = "@string/hint_edittext_title"
             android:autofillHints="name"
-            android:inputType="text"/>
-
-
+            android:hint="@string/hint_edittext_title"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@+id/btnBuscar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <androidx.appcompat.widget.AppCompatButton
@@ -48,49 +45,45 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
 
-            app:layout_constraintTop_toBottomOf="@+id/btnBuscar"
             android:entries="@{mainViewModel.getYearsLiveData}"
             android:selectedItemPosition="@={mainViewModel.selectedYearLiveData}"
-
             app:layout_constraintEnd_toEndOf="parent"
+
             app:layout_constraintStart_toStartOf="parent"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/btnBuscar">
 
         </androidx.appcompat.widget.AppCompatSpinner>
 
 
-        <FrameLayout
+        <TextView
+            android:id="@+id/tvEmptyList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="top|center"
+
+
+            android:text="@string/no_data"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@+id/spinYears"
+            android:paddingTop="10dp"/>
+
+
+        <com.actia.myapplication.controls.RecyclerViewEmptySupport
+            android:id="@+id/rvItems"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:listData="@{mainViewModel.getItemsLiveData}"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinYears">
-
-
-            <TextView
-                android:id="@+id/tvEmptyList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_gravity="center"
-
-                android:text="@string/no_data"/>
-
-
-            <com.actia.myapplication.controls.RecyclerViewEmptySupport
-                android:id="@+id/rvItems"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnBuscar"
-
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="vertical"
-                />
-        </FrameLayout>
+            app:layout_constraintTop_toBottomOf="@+id/spinYears"/>
 
 
         <include android:id="@+id/include_velo" layout="@layout/include_waiting_response"/>

@@ -10,20 +10,28 @@ class RecyclerViewEmptySupport : RecyclerView {
     private var emptyView: View? = null
     private val emptyObserver: AdapterDataObserver = object : AdapterDataObserver() {
         override fun onChanged() {
-            val adapter = adapter
-            if(emptyView != null) {
-                if (adapter == null || adapter.itemCount == 0) {
-                    emptyView?.visibility = View.VISIBLE
-                    this@RecyclerViewEmptySupport.visibility = View.GONE
-                }
-                else
-                {
-                    emptyView?.visibility = View.GONE
-                    this@RecyclerViewEmptySupport.visibility = View.VISIBLE
-                }
-            }
-
             super.onChanged()
+
+            verifyData()
+        }
+
+        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+            super.onItemRangeRemoved(positionStart, itemCount)
+
+            verifyData()
+        }
+    }
+
+    private fun verifyData() {
+        val adapter = adapter
+        if (emptyView != null) {
+            if (adapter == null || adapter.itemCount == 0) {
+                emptyView?.visibility = VISIBLE
+                this@RecyclerViewEmptySupport.visibility = GONE
+            } else {
+                emptyView?.visibility = GONE
+                this@RecyclerViewEmptySupport.visibility = VISIBLE
+            }
         }
     }
 
