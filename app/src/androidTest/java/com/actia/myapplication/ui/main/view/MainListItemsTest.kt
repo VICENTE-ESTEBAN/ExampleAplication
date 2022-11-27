@@ -1,12 +1,13 @@
 package com.actia.myapplication.ui.main.view
 
-
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -15,6 +16,7 @@ import com.actia.myapplication.R
 import com.actia.myapplication.data.domain.model.DetailItem
 import com.actia.myapplication.util.IdlingResourceCounter.countingIdlingResource
 import com.actia.myapplication.utils.RecyclerViewItemCountAssertion
+import com.actia.myapplication.utils.RecyclerViewMatcher
 import com.actia.myapplication.utils.TestBaseData
 import okhttp3.mockwebserver.MockResponse
 import org.hamcrest.Description
@@ -96,45 +98,43 @@ class MainListItemsTest: TestBaseData() {
 
 
 
-        //testFirstItemsAdapter(activity.findViewById(R.id.rvItems), 0)
-    }
-
-    private fun testScreenValues(){
-        val expectedResult = DetailItem(
+        testScreenValues(0, DetailItem(
             title="Rambo: First Blood Part II",
             poster="https://m.media-amazon.com/images/M/MV5BZWFkY2I1ZDAtNmZhNS00NjVlLWJiMGQtMGQ1ZmM0ZDA5ODg5XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
             director="George P. Cosmatos",
             releaseYear="1985",
             duration="96 min",
             description="Rambo returns to the jungles of Vietnam on a mission to infiltrate an enemy base-camp and rescue the American POWs still held captive there.",
-            score="6.5")
+            score="6.5"))
+
+        testScreenValues(8,
+            DetailItem(
+                title="Rambo: Last Blood",
+                poster="https://m.media-amazon.com/images/M/MV5BNTAxZWM2OTgtOTQzOC00ZTI5LTgyYjktZTRhYWM4YWQxNWI0XkEyXkFqcGdeQXVyMjMwNDgzNjc@._V1_SX300.jpg",
+                director="Adrian Grunberg",
+                releaseYear="2019",
+                duration="89 min",
+                description="Rambo must confront his past and unearth his ruthless combat skills to exact revenge in a final mission.",
+                score="6.1"))
+    }
+
+    private fun testScreenValues(position:Int, expectedResult:DetailItem){
+
+        onView(withId(R.id.rvItems)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                position
+            )
+        )
+
+        onView(RecyclerViewMatcher(R.id.rvItems)
+            .atPositionOnView(position, R.id.txtTitle))
+            .check(matches(allOf(isDisplayed(), withText(expectedResult.title))))
+
+        onView(RecyclerViewMatcher(R.id.rvItems)
+            .atPositionOnView(position, R.id.txtReleaseYear))
+            .check(matches(allOf(isDisplayed(), withText(expectedResult.releaseYear))))
 
 
-        onView(allOf(withId(R.id.txtTitle),
-            isDisplayed())
-        ).check(matches(withText(expectedResult.title)))
-
-
-        onView(allOf(withId(R.id.txtDirector),
-            isDisplayed())
-        ).check(matches(withText(expectedResult.director)))
-
-
-        onView(allOf(withId(R.id.txtReleaseYear),
-            isDisplayed())
-        ).check(matches(withText(expectedResult.releaseYear)))
-
-        onView(allOf(withId(R.id.txtDuration),
-            isDisplayed())
-        ).check(matches(withText(expectedResult.duration)))
-
-        onView(allOf(withId(R.id.txtDescription),
-            isDisplayed())
-        ).check(matches(withText(expectedResult.description)))
-
-        onView(allOf(withId(R.id.txtScore),
-            isDisplayed())
-        ).check(matches(withText(expectedResult.score)))
     }
 
    /* private fun testFirstItemsAdapter(checkPosition:Int){
