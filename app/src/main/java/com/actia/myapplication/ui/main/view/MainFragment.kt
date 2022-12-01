@@ -21,13 +21,17 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding  = FragmentMainBinding.inflate(inflater, container, false)
 
-        binding.rvItems.setEmptyView(binding.tvEmptyList)
         isShowVeloVisible(false)
 
+        binding.tvEmptyList.visibility = View.GONE
+
         binding.btnBuscar.setOnClickListener {
+            binding.rvItems.setEmptyView(binding.tvEmptyList)
+
+            binding.rvItems.visibility = View.VISIBLE
+
             val textToSearch = binding.etTitle.text.toString()
             if(textToSearch.isEmpty())
             {
