@@ -8,9 +8,6 @@ import org.hamcrest.TypeSafeMatcher
 
 
 class RecyclerViewMatcher(private val recyclerViewId: Int) {
-    fun atPosition(position: Int): TypeSafeMatcher<View?> {
-        return atPositionOnView(position, -1)
-    }
 
     fun atPositionOnView(position: Int, targetViewId: Int): TypeSafeMatcher<View?> {
         return object : TypeSafeMatcher<View?>() {
@@ -24,7 +21,7 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
                     } catch (var4: Resources.NotFoundException) {
                         String.format(
                             "%s (resource name not found)",
-                            *arrayOf<Any>(Integer.valueOf(recyclerViewId))
+                            Integer.valueOf(recyclerViewId)
                         )
                     }
                 }

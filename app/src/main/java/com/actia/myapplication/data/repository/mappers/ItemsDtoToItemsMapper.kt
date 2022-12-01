@@ -28,7 +28,7 @@ class ItemsDtoToItemsMapper: Mapper<SearchResultDTO, List<Item>> {
         )
     }
 
-    private fun parseURL(value:String?): String? {
+    private fun parseURL(value:String?): String {
         return if (value.isNullOrEmpty() || value == Constants.EMPTY_FIELD)
             ""
         else

@@ -55,14 +55,6 @@ class ItemAdapter(listOfItems:List<Item>) :
         notifyItemRemoved(position)
     }
 
-    fun getItem(position:Int):Item?
-    {
-        return if(position>=0 && position<listItems.size) {
-             listItems[position]
-        }
-        else null
-    }
-
     class BaseViewHolder(private val binding: ImdbItemsBinding) : RecyclerView.ViewHolder(
         binding.root
     ) {

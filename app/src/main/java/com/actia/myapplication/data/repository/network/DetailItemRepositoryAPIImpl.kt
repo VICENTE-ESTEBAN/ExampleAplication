@@ -1,7 +1,6 @@
 package com.actia.myapplication.data.repository.network
 
 import com.actia.myapplication.data.domain.model.DetailItem
-import com.actia.myapplication.data.domain.model.Item
 import com.actia.myapplication.data.domain.model.Result
 import com.actia.myapplication.data.repository.mappers.helpers.Mapper
 import com.actia.myapplication.data.repository.response.ItemDTO
@@ -9,7 +8,6 @@ import com.actia.myapplication.data.service.RetrofitOmdbEndpoints
 import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.Response
-import java.util.concurrent.atomic.AtomicBoolean
 
 
 class DetailItemRepositoryAPIImpl(
@@ -61,24 +59,6 @@ class DetailItemRepositoryAPIImpl(
 
     private fun mapItems(result: ItemDTO): DetailItem {
         return itemDataMapper.map(result)
-    }
-
-
-    companion object Factory {
-        private lateinit var INSTANCE: DetailItemRepositoryAPI
-        private val initialized = AtomicBoolean()
-
-        val TAG = DetailItemRepositoryAPIImpl::class.java.simpleName
-
-        fun getInstance(
-            feedsEndpoint: RetrofitOmdbEndpoints,
-            itemMapper: Mapper<ItemDTO, DetailItem>
-        ): DetailItemRepositoryAPI {
-            if (initialized.compareAndSet(false, true)) {
-                INSTANCE = DetailItemRepositoryAPIImpl(feedsEndpoint, itemMapper)
-            }
-            return INSTANCE
-        }
     }
 
 }

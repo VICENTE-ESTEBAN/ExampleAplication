@@ -1,6 +1,5 @@
 package com.actia.myapplication.util
 
-import android.content.Context
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,8 +20,6 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<Item>) {
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-            // this method is called
-            // when the item is moved.
             return true
         }
 

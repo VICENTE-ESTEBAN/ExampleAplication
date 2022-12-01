@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.actia.myapplication.R
 import com.actia.myapplication.databinding.FragmentMainBinding
@@ -13,12 +12,6 @@ import com.actia.myapplication.ui.main.viewmodel.MainViewModel
 import com.actia.myapplication.util.hideKeyboard
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
 
@@ -27,7 +20,7 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         //binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding  = FragmentMainBinding.inflate(inflater, container, false)
 

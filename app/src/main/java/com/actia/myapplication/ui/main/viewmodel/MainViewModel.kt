@@ -19,9 +19,10 @@ import com.actia.myapplication.util.IdlingResourceCounter.countingIdlingResource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.inject
 
-
+@OptIn(KoinApiExtension::class)
 class MainViewModel(application: Application) : BaseViewModel(application)
 {
     companion object
@@ -35,9 +36,10 @@ class MainViewModel(application: Application) : BaseViewModel(application)
     val getYearsLiveData : ObservableArrayList<String> = ObservableArrayList<String>()
     val selectedYearLiveData :MutableLiveData<Int> = MutableLiveData<Int>(-1)
 
+
     private val getDetailItemByImdbUseCase: GetDetailItemByImdbUseCase by inject()
     private val getDetailItemByTitleUseCase: GetDetailItemByTitleUseCase by inject()
-    private val getFullListItemsLiveData: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
+    private val getFullListItemsLiveData: MutableLiveData<List<Item>?> = MutableLiveData(emptyList())
 
 
     val getItemsLiveData :LiveData<List<Item>> = Transformations.map(selectedYearLiveData)

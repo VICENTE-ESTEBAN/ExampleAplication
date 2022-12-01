@@ -6,6 +6,7 @@ import com.actia.myapplication.di.DomainModules
 import com.actia.myapplication.di.RepositoryModules
 import okhttp3.mockwebserver.MockWebServer
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
@@ -13,6 +14,7 @@ import org.koin.core.context.stopKoin
 import org.koin.core.module.Module
 import org.koin.dsl.koinApplication
 
+@OptIn(KoinApiExtension::class)
 abstract class TestBaseData: KoinComponent {
 
     protected fun koinTestSetUp() {

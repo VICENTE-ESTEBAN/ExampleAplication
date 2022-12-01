@@ -124,8 +124,8 @@ data class ItemDTO (
     }
 
     override fun hashCode(): Int {
-        var result = title?.hashCode() ?: 0
-        result = 31 * result + (year?.hashCode() ?: 0)
+        var result = title.hashCode()
+        result = 31 * result + year.hashCode()
         result = 31 * result + (rated?.hashCode() ?: 0)
         result = 31 * result + (released?.hashCode() ?: 0)
         result = 31 * result + (runtime?.hashCode() ?: 0)
@@ -137,12 +137,12 @@ data class ItemDTO (
         result = 31 * result + (language?.hashCode() ?: 0)
         result = 31 * result + (country?.hashCode() ?: 0)
         result = 31 * result + (awards?.hashCode() ?: 0)
-        result = 31 * result + (poster?.hashCode() ?: 0)
+        result = 31 * result + poster.hashCode()
         result = 31 * result + ratings.contentHashCode()
         result = 31 * result + (metascore?.hashCode() ?: 0)
         result = 31 * result + (imdbRating?.hashCode() ?: 0)
         result = 31 * result + (imdbVotes?.hashCode() ?: 0)
-        result = 31 * result + (imdbID?.hashCode() ?: 0)
+        result = 31 * result + imdbID.hashCode()
         result = 31 * result + (type?.hashCode() ?: 0)
         result = 31 * result + (dVD?.hashCode() ?: 0)
         result = 31 * result + (boxOffice?.hashCode() ?: 0)

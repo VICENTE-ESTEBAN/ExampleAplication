@@ -8,7 +8,6 @@ import com.actia.myapplication.data.service.RetrofitOmdbEndpoints
 import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.Response
-import java.util.concurrent.atomic.AtomicBoolean
 
 
 class ItemRepositoryAPIImpl(
@@ -16,9 +15,9 @@ class ItemRepositoryAPIImpl(
     private val itemDataMapper: Mapper<SearchResultDTO, List<Item>>
 ) : ItemRepositoryAPI
 {
-    override fun getItemsByName(apiKey:String, name: String): Single<Result<List<Item>>> {
+    override fun getItemsByName(apiKey:String, title: String): Single<Result<List<Item>>> {
         return Single.create { emitter ->
-            val call: Call<SearchResultDTO> = itemApiService.getItemsByTitle(apiKey, name)
+            val call: Call<SearchResultDTO> = itemApiService.getItemsByTitle(apiKey, title)
 
             val response: Response<SearchResultDTO> = call.execute()
 
@@ -39,24 +38,6 @@ class ItemRepositoryAPIImpl(
 
     private fun mapItems(result: SearchResultDTO): List<Item> {
         return itemDataMapper.map(result)
-    }
-
-
-    companion object Factory {
-        private lateinit var INSTANCE: ItemRepositoryAPI
-        private val initialized = AtomicBoolean()
-
-        val TAG = ItemRepositoryAPIImpl::class.java.simpleName
-
-        fun getInstance(
-            feedsEndpoint: RetrofitOmdbEndpoints,
-            itemMapper: Mapper<SearchResultDTO, List<Item>>
-        ): ItemRepositoryAPI {
-            if (initialized.compareAndSet(false, true)) {
-                INSTANCE = ItemRepositoryAPIImpl(feedsEndpoint, itemMapper)
-            }
-            return INSTANCE
-        }
     }
 
 }
